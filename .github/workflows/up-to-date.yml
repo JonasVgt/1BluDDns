@@ -25,11 +25,24 @@ jobs:
           pip install -r requirements.txt
       - name: Check for outdated packages
         run: |
-          OUTDATED=$(pip-review --local --raw)
-          if [ -n "$OUTDATED" ]; then
-            echo "❌ The following packages are outdated:"
-            echo "$OUTDATED"
-            exit 1
-          else
-            echo "✅ All packages are up to date."
-          fi
+            # Extract only the package names (no version pins)
+            REQ_PACKAGES=$(grep -oP '^[a-zA-Z0-9\-_]+' requirements.txt)
+
+            # Check for outdated packages and capture their names
+            OUTDATED=$(pip list --outdated --format=freeze | cut -d= -f1)
+
+            # Find intersection between the two
+            OUTDATED_MATCHED=""
+            for pkg in $REQ_PACKAGES; do
+              if echo "$OUTDATED" | grep -iq "^$pkg$"; then
+                OUTDATED_MATCHED+="$pkg"$'\n'
+              fi
+            done
+
+            if [ -n "$OUTDATED_MATCHED" ]; then
+              echo "❌ The following packages from requirements.txt are outdated:"
+              echo "$OUTDATED_MATCHED"
+              exit 1
+            else
+              echo "✅ All packages in requirements.txt are up to date."
+            fi
