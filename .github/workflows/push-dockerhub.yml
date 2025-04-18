@@ -24,4 +24,4 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: user/tes_app:latest
+          tags: user/test_app:latest
