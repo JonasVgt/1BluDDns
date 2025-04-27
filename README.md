@@ -4,8 +4,12 @@ This python script is used to dynamicly update the dns-records for the 1Blu name
 
 ## Gettings Started
 
-This service can be simply run as a docker container.
-### Quick setup:
+> [!NOTE] 
+> It is highly recommended to run this script inside a Docker container. This guarantees the best protection against any potential attacks.
+
+### Docker:
+
+To run this service as a Docker container, simply run the following command. Be sure to set the environment variables correctly.
 ```
 docker run -it -d \
       -e USERNAME=1234567 \
@@ -18,7 +22,9 @@ docker run -it -d \
       --name=1blu-ddns \
     jonasvoigt/1blu-ddns:latest
 ```
-### Docker compose:
+### Docker Compose:
+To run this service with Docker Compose, copy the following text into a docker-compose.yml. Be sure to set the environment variables correctly.
+
 ```
 version: '3'
 services:
@@ -34,6 +40,23 @@ services:
       - LOGGING=INFO
       - CONTRACT=123123
 ```
+
+### Windows
+If you want to run the service on Windows without Docker, you can do that as follows:
+
+1. Download the source code of the latest release or simply clone this repository.
+2. Extract the source code into any directory of your choice
+3. Install Python version 3.11 (newer versions should also work) 
+4. Open command prompt in the 1BluDDns folder
+5. Install dependencies:\
+   <code>pip install -r requirements.txt</code>
+6. Set environemnt variables: \
+   e.g. <code>set DOMAIN_NUMBER=123456</code>
+7. Run script: \
+   <code>python ./app/main.py</code>
+   
+> [!NOTE] 
+> The DDns only works as long as the script runs. Additinally, all environment variables need to be set everytime the terminal is restarted. The script is not automatically rerun when the computer is rebooted.
 
 ## Environment Variables
 
