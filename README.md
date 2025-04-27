@@ -1,6 +1,6 @@
 # 1Blu DDNS
 
-This python script is used to dynamicly update the dns-records for the 1blu nameservers so, that a server is always accessible even if its ip-address gets changed. Different to most other providers 1blu sadly has no api for this purpose. Nevertheless it is possible to achieve this service by navigating through the menus like a human would. 
+This python script is used to dynamicly update the dns-records for the 1Blu nameservers so, that a server is always accessible even if its ip-address gets changed. Different to most other providers 1Blu sadly has no api for this purpose. Nevertheless it is possible to achieve this service by navigating through the menus like a human would. 
 
 ## Gettings Started
 
@@ -37,11 +37,11 @@ services:
 
 ## Environment Variables
 
-<code>USERNAME</code> Your 1blu username
+<code>USERNAME</code> Your 1Blu username
 
-<code>PASSWORD</code> Your 1blu password
+<code>PASSWORD</code> Your 1Blu password
 
-<code>OTP_KEY</code> (optional) Your 1blu OTP key. If you don't have 2-factor authentification activated on your account, this variable can be ignored. Note: this is not the key that is used to log into your account. The code can be found when setting up teh otp.
+<code>OTP_KEY</code> (optional) Your 1Blu OTP key. If you don't have 2-factor authentification activated on your account, this variable can be ignored. Note: this is not the key that is used to log into your account. The code can be found when setting up the otp.
 
 ![where to find the otp-key](img/otp_key_edited.png)
 
@@ -60,7 +60,7 @@ services:
 
 <code>LOGGING_LEVEL</code> (optional) The logging level. Can be one of the following:
 - INFO (default): info, warnings and errors will be logged.
-- WARNING: warnings and rrrors will be logged.
+- WARNING: warnings and errors will be logged.
 - ERROR: only errors will be logged
 - DEBUG: info, warning, errors and debug messages will be logged.
 
@@ -68,7 +68,7 @@ services:
 ## How this script works
 
 ### Sessions:
-1blu uses sessions to verify that a request is allowed. Each session has a unique session-id. After logging it is possible with the session-id to make any change to the account, including changing the dns records. These sessions are only valid for a certain amount of time. This means that the script needs to be able to create new sessions and log in by itself.
+1Blu uses sessions to verify that a request is allowed. Each session has a unique session-id. After logging it is possible with the session-id to make any change to the account, including changing the dns records. These sessions are only valid for a certain amount of time. This means that the script needs to be able to create new sessions and log in by itself.
 
 ### Creating sessions:
 Creating a new session is not hard. When a request to the login page (https://ksb.1blu.de) is send, the server will return a new session id. This session-id is stored in the cookies as <code>PHPSESSID</code>. The cookies are included in the following requests. 
@@ -86,7 +86,7 @@ If 2fa is enabled, the next step is to generate a otp and send it with a POST re
 
 This request also needs a csrf-token, which can be found at https://ksb.1blu.de/2fa/.
 
-Finally the script validates, if the login was successful by checking if the start-page is accessible. 
+Finally, the script validates, if the login was successful by checking if the start-page is accessible. 
 
 ### Retrieving the dns records:
 The dns records are included in the page https://ksb.1blu.de/CONTRACT-NUMBER/domain/DOMAIN-NUMBER/dns/ encoded as json. 
