@@ -41,6 +41,20 @@ services:
       - CONTRACT=123123
 ```
 
+### Linux
+If you want to run the service on Linux without Docker, you can do that as follows:
+
+1. Download the source code of the latest release or simply clone this repository.
+2. Extract the source code into any directory of your choice
+3. Install Python version 3.11 (newer versions should also work) 
+4. Open the terminal in the 1BluDDns folder
+5. Install dependencies:\
+   <code>pip install -r requirements.txt</code>
+6. Set environemnt variables: \
+   e.g. <code>DOMAIN_NUMBER=123456</code>
+7. Run script: \
+   <code>python3 ./app/main.py</code>
+
 ### Windows
 If you want to run the service on Windows without Docker, you can do that as follows:
 
