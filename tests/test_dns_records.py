@@ -44,7 +44,7 @@ class TestDnsRecords(unittest.TestCase):
 
         url_encoded = dns_records.to_form_url_encoded(records)
         print(url_encoded)
-        self.assertEquals(url_encoded, (
+        self.assertEqual(url_encoded, (
             'records[0][id]=0&records[0][hostname]=@&records[0][type]=A&records[0][target]=123.123.123.123&'
             'records[1][id]=1&records[1][hostname]=www&records[1][type]=A&records[1][target]=123.456.789.10&'
             'records[2][id]=2&records[2][hostname]=mail&records[2][type]=A&records[2][target]=123.123.234.234&'
