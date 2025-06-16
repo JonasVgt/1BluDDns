@@ -1,8 +1,8 @@
 import re
 import requests
 import logging
-import dns_records
-import session
+from . import dns_records
+from . import session
 
 URL_BASE = "https://ksb.1blu.de"
 

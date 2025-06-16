@@ -2,7 +2,7 @@ import logging
 import requests
 import os
 from dns import resolver
-import api
+from . import api
 import sys
 import time
 
