@@ -53,7 +53,7 @@ If you want to run the service on Linux without Docker, you can do that as follo
 6. Set environemnt variables: \
    e.g. <code>DOMAIN_NUMBER=123456</code>
 7. Run script: \
-   <code>python3 ./app/main.py</code>
+   <code>python3 -m app.main</code>
 
 ### Windows
 If you want to run the service on Windows without Docker, you can do that as follows:
@@ -67,7 +67,7 @@ If you want to run the service on Windows without Docker, you can do that as fol
 6. Set environemnt variables: \
    e.g. <code>set DOMAIN_NUMBER=123456</code>
 7. Run script: \
-   <code>python ./app/main.py</code>
+   <code>python3 -m app.main</code>
    
 > [!NOTE] 
 > The DDns only works as long as the script runs. Additinally, all environment variables need to be set everytime the terminal is restarted. The script is not automatically rerun when the computer is rebooted.
@@ -88,9 +88,29 @@ If you want to run the service on Windows without Docker, you can do that as fol
 
 <code>DOMAIN</code> The domain without the subdomain. For example: "example.de" 
 
-<code>SUBDOMAIN</code> (optional) The subdomain. If omitted, the maindomain will be used.
+<code>SUBDOMAIN</code> (optional) The subdomain(s) that should be updated. If omitted, only the base domain will be updated. Multiple subdomains can be defined as a comma-seperated list. When using such comma-seperated list, use the base domain is indicated by the `@` symbol. By default, the rrtype defined by the RRTYPE environment variable is updated for all subdomains. Optionally, a different rrtype can be set per subdomain by appending it in curly braces. 
 
-<code>RRTYPE</code> (optional) The rrtype. Can be either A (default) for ipv4 or AAAA for ipv6.
+> [!IMPORTANT]
+> Do not include any spaces in the SUBDOMAIN definition
+
+Example:
+```
+SUBDOMAIN="cloud,home{AAAA},@{A}"
+```
+
+In this example, the following DNS entries are updated
+
+|subdomain| rrtype|
+|-|-|
+|cloud| same as RRTYPE|
+|home| AAAA|
+|@ (base domain)| A|
+
+
+
+
+
+<code>RRTYPE</code> (optional) The default rrtype used for all subdomains. Can be either A (default) for ipv4 or AAAA for ipv6.
 
 
 <code>INTERVAL</code> (optional) The interval between update tries in minutes. Defaults to 180. 
