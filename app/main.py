@@ -5,6 +5,7 @@ from dns import resolver
 from . import api
 import sys
 import time
+import re
 
 logging_level = {"INFO": logging.INFO, "WARNING": logging.WARNING, "ERROR" : logging.ERROR, "DEBUG" : logging.DEBUG}
 
@@ -68,18 +69,41 @@ def get_remote_ip(domain: str, subdomain: str, rrtype: str) -> str:
     return res[0].to_text()
 
 
+def parse_subdomains(subdomains: str, default_rrtype: str) -> list[tuple[str, str]]:
+    """Parse the input string of subdomains. Return tuple of subdomain and rrtype"""
+    logging.debug(f"Parsing subdomain string: \"{subdomains}\" with default rrtype: {default_rrtype}...")
+    if(not subdomains):
+        logging.debug("Subdomains variable empty. Returning default")
+        return([("@", default_rrtype)])
+    res = []
+    for s in subdomains.split(","):
+        logging.debug(f"Parsing: \"{s}\"...")
+        match = re.match(r"^([^{}]*)(?:\{([^{}]*)\})?$", s)
+        if(not match):
+            logging.error(f"Invalid value for SUBDOMAIN environment variable: \"{s}\" is not valid.")
+            logging.debug(f"Sucessfully parsed: {res}")
+            return []
+        if not match.group(1):
+            logging.warning("Invalid value for SUBDOMAIN environment variable: The comma seperated value must not contain any empty entries or trailing commas. These will be ignored.")
+            continue
+
+        res.append((match.group(1), match.group(2) or default_rrtype))
+    return res
+
 def check_for_updates(domain: str, subdomain: str, rrtype: str, api : api.Api):
     """Checks, if own ip address differs from the servers. If that is the case, the dns-records are updated."""
     logging.info("Checking for changes...")
-    my_ip = get_my_public_ip(rrtype == "AAAA")
-    remote_ip = get_remote_ip(domain, subdomain, rrtype)
-    if(my_ip == remote_ip):
-        logging.info("DNS records still up to date. No update needed.")
-        return
-    logging.info(f"DNS records are not up to date. Updating from '{remote_ip}' to '{my_ip}'.")
-    api.renew_session_if_needed()
-    if (api.update_address(subdomain,rrtype,my_ip)):
-        logging.info("Updating sucessful.")
+    for (sd, rrt) in parse_subdomains(subdomain, rrtype):
+        my_ip = get_my_public_ip(rrt == "AAAA")
+        remote_ip = get_remote_ip(domain, sd, rrt)
+        if(my_ip == remote_ip):
+            logging.info(f"DNS records still up to date for: {sd}.{domain} ({rrt}). No update needed.")
+            continue
+        
+        logging.info(f"DNS records are not up to date for: {sd}.{domain} ({rrt}). Updating from '{remote_ip}' to '{my_ip}'.")
+        api.renew_session_if_needed()
+        if (api.update_address(sd,rrt,my_ip)):
+            logging.info("Updating sucessful.")
         
 
 def main():
