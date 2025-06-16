@@ -95,7 +95,7 @@ If you want to run the service on Windows without Docker, you can do that as fol
 
 Example:
 ```
-SUBDOMAIN="cloud,home{AAAA},@{A}"
+SUBDOMAIN=cloud,home{AAAA},@{A}"
 ```
 
 In this example, the following DNS entries are updated
