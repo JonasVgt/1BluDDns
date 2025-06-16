@@ -6,4 +6,4 @@ WORKDIR /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-CMD [ "python", "./app/main.py" ]
+CMD [ "python", "-m" "app.main" ]
